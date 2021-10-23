@@ -142,17 +142,17 @@ else
 				continue;
 			}
 
-			$cat_i18n = $i18n_structure[$code][$i18n_locale];
+			$cat_i18n = isset($i18n_structure[$code][$i18n_locale]) ? $i18n_structure[$code][$i18n_locale] : null;
 
 			$t->assign(array(
-				'I18N_CATEGORY_ROW_TITLE' => htmlspecialchars($row['title']),
-				'I18N_CATEGORY_ROW_DESC' => htmlspecialchars($row['desc']),
+				'I18N_CATEGORY_ROW_TITLE' => htmlspecialchars(@$row['title']),
+				'I18N_CATEGORY_ROW_DESC' => htmlspecialchars(@$row['desc']),
 				'I18N_CATEGORY_ROW_CODE_NAME' => "code[$ii]",
 				'I18N_CATEGORY_ROW_CODE_VALUE' => $code,
 				'I18N_CATEGORY_ROW_ITITLE_NAME' => "title[$ii]",
-				'I18N_CATEGORY_ROW_ITITLE_VALUE' => htmlspecialchars($cat_i18n['title']),
+				'I18N_CATEGORY_ROW_ITITLE_VALUE' => htmlspecialchars(@$cat_i18n['title']),
 				'I18N_CATEGORY_ROW_IDESC_NAME' => "desc[$ii]",
-				'I18N_CATEGORY_ROW_IDESC_VALUE' => htmlspecialchars($cat_i18n['desc']),
+				'I18N_CATEGORY_ROW_IDESC_VALUE' => htmlspecialchars(@$cat_i18n['desc']),
 				'I18N_CATEGORY_ROW_ODDEVEN' => cot_build_oddeven($ii)
 			));
 

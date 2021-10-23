@@ -9,12 +9,6 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-// if lang/ru/main.ru.lang.php is not loaded
-if(!isset($L['PFS'])) {
-    $mainLangFile = cot_langfile('main', 'core');
-    if(file_exists($mainLangFile)) include $mainLangFile;
-}
-
 /**
  * Module Config
  */
@@ -41,7 +35,7 @@ $L['info_desc'] = 'Управление контентом: страницы и 
  */
 
 $L['cfg_order_params'] = array(); // Redefined in cot_page_config_order()
-$L['cfg_way_params'] = array($L['Ascending'], $L['Descending']);
+$L['cfg_way_params'] = @array($L['Ascending'], $L['Descending']);
 $L['cfg_metatitle'] = 'Meta-заголовок';
 $L['cfg_metadesc'] = 'Meta-описание';
 
@@ -68,6 +62,7 @@ $L['adm_filesize'] = 'Размер файла';
  */
 
 $L['page_addtitle'] = 'Создать страницу';
+$L['page_edittitle'] = 'Изменить страницу';
 $L['page_addsubtitle'] = 'Заполните необходимые поля и отправьте форму для продолжения';
 $L['page_edittitle'] = 'Свойства страницы';
 $L['page_editsubtitle'] = 'Измените необходимые поля и нажмите "Отправить" для продолжения';
@@ -114,6 +109,9 @@ $L['page_status_pending'] = 'На рассмотрении';
 $L['page_status_approved'] = 'Утверждена';
 $L['page_status_published'] = 'Опубликована';
 $L['page_status_expired'] = 'Устарела';
+
+$L['page_status_moderated'] = 'На модерации';
+$L['page_status_hidden'] = 'Скрытые';
 
 /**
  * Moved from theme.lang

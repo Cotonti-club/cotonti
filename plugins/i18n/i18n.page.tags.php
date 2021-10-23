@@ -56,7 +56,7 @@ if ($i18n_enabled)
 	if ($i18n_write)
 	{
 		// Translation tags
-		if ($pag_i18n)
+		if (isset($pag_i18n))
 		{
 			if ($i18n_admin || $pag_i18n['ipage_translatorid'] == $usr['id'])
 			{
@@ -85,7 +85,7 @@ if ($i18n_enabled)
 	if ($i18n_admin)
 	{
 		// Control tags
-		if ($pag_i18n)
+		if (isset($pag_i18n))
 		{
 			// Delete translation
 			$url_i18n = cot_url('plug', "e=i18n&m=page&a=delete&id=$id&l=$i18n_locale");

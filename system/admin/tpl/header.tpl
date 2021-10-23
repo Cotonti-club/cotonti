@@ -32,7 +32,7 @@
     {HEADER_COMPOPUP}
     <title>{HEADER_TITLE}</title>
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 
 <!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">

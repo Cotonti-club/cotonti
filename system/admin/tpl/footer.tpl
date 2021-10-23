@@ -1,5 +1,5 @@
 <!-- BEGIN: FOOTER -->
-<footer id="footer" class="footer">
+<footer id="footer" class="footer mt-auto ">
 	<div class="copyright">
 		&copy; Copyright <strong><a href="https://cotonti.club/" target="_blank">Cotonti.club</a></strong>. All Rights Reserved
 	</div>

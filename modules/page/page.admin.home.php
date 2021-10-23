@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=admin.home.toppanel
+Hooks=admin.home.sidepanel
 [END_COT_EXT]
 ==================== */
 
@@ -18,12 +18,11 @@ $tt = new XTemplate(cot_tplfile('page.admin.home', 'module', true));
 
 require_once cot_incfile('page', 'module');
 
-	$pagesQueued = $db->query("SELECT COUNT(*) FROM $db_pages WHERE page_state='1'")->fetchColumn();
-	$pagesPublished = $db->query("SELECT COUNT(*) FROM $db_pages WHERE page_state='0'")->fetchColumn();
+	$pagesqueued = $db->query("SELECT COUNT(*) FROM $db_pages WHERE page_state='1'");
+	$pagesqueued = $pagesqueued->fetchColumn();
 	$tt->assign(array(
 		'ADMIN_HOME_URL' => cot_url('admin', 'm=page'),
-		'ADMIN_HOME_PAGESQUEUED' => $pagesQueued,
-		'ADMIN_HOME_PAGESPUBLISHED' => $pagesPublished
+		'ADMIN_HOME_PAGESQUEUED' => $pagesqueued
 	));
 
 $tt->parse('MAIN');

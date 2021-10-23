@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_THEME]
-Name=Nemesis
+Name=Nemesis 2
 Version=1.0.1
 Schemes=default:Default
 [END_COT_THEME]

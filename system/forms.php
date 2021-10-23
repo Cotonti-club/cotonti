@@ -428,6 +428,57 @@ function cot_selectbox_structure($extension, $check, $name, $subcat = '', $hidep
 	return($result);
 }
 
+function cot_selectbox_structure_tree($extension, $check, $name, $add_empty = true, $attrs = '', $maxDepth = 5)
+{
+    global $cfg;
+    $structure = cot_structure_tree($extension);
+    $error = $cfg['msg_separate'] ? cot_implode_messages($name, 'error') : '';
+
+    function get_children($item, $level = 0)
+    {
+        global $check, $maxDepth;
+
+        if ($level != 0) {
+            $addi = "|" . str_repeat("-", $level);
+        } else {
+            $addi = "&nbsp;";
+        }
+        $options = cot_rc("input_option", array(
+            'value' => $item["rpath"],
+            'selected' => $check == $item["rpath"],
+            'title' => $addi . $item["title"]
+        ));
+        if (isset($item["children"])) {
+            foreach ($item["children"] as $sub) {
+                if($level < $maxDepth){
+                    continue;
+                }
+                $options .= get_children($sub, $level + 1);
+            }
+        }
+        return $options;
+    }
+
+    $options = '';
+    if ($add_empty) {
+        $options .= cot_rc("input_option", array(
+            'value' => '',
+            'title' => '---'
+        ));
+    }
+    foreach ($structure as $item) {
+        $options .= get_children($item);
+    }
+
+    return cot_rc('input_select', array(
+        'name' => $name,
+        'attrs' => $attrs,
+        'error' => $error,
+        'options' => $options
+    ));
+}
+
+
 /**
  * Generates a textarea
  *

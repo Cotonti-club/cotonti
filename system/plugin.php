@@ -121,8 +121,8 @@ if ($autoassigntags) {
 	if (empty($o)) {
 		$t->assign(array(
 			'PLUGIN_TITLE' => cot_breadcrumbs($pltitle, $cfg['homebreadcrumb']),
-			'PLUGIN_SUBTITLE' => $plugin_subtitle,
-			'PLUGIN_BODY' => $plugin_body
+			'PLUGIN_SUBTITLE' => @$plugin_subtitle,
+			'PLUGIN_BODY' => @$plugin_body
 		));
 	} else {
 		cot_sendheaders();

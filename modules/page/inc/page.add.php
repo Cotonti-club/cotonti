@@ -14,12 +14,12 @@ require_once cot_incfile('forms');
 $id = cot_import('id', 'G', 'INT');
 $c = cot_import('c', 'G', 'TXT');
 
-if (!empty($c) && !isset(cot::$structure['page'][$c]))
+if (!empty($c) && !isset($structure['page'][$c]))
 {
 	$c = '';
 }
 
-list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('page', 'any');
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', 'any');
 
 /* === Hook === */
 foreach (cot_getextplugins('page.add.first') as $pl)
@@ -27,9 +27,14 @@ foreach (cot_getextplugins('page.add.first') as $pl)
 	include $pl;
 }
 /* ===== */
-cot_block(cot::$usr['auth_write']);
+cot_block($usr['auth_write']);
 
-$sys['parser'] = cot::$cfg['page']['parser'];
+if ($structure['page'][$c]['locked'])
+{
+	cot_die_message(602, TRUE);
+}
+
+$sys['parser'] = $cfg['page']['parser'];
 $parser_list = cot_get_parsers();
 
 if ($a == 'add')
@@ -43,7 +48,7 @@ if ($a == 'add')
 	}
 	/* ===== */
 
-	$rpage = cot_page_import('POST', array(), cot::$usr);
+	$rpage = cot_page_import('POST', array(), $usr);
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $rpage['page_cat']);
 	cot_block($usr['auth_write']);
@@ -64,10 +69,12 @@ if ($a == 'add')
 	}
 	/* ===== */
 
-	if (!cot_error_found()) {
+	if (!cot_error_found())
+	{
 		$id = cot_page_add($rpage, $usr);
 
-		switch ($rpage['page_state']) {
+		switch ($rpage['page_state'])
+		{
 			case 0:
 				$urlparams = empty($rpage['page_alias']) ?
 					array('c' => $rpage['page_cat'], 'id' => $id) :
@@ -83,72 +90,31 @@ if ($a == 'add')
 				break;
 		}
 		cot_redirect($r_url);
-
-	} else {
-        $urlParams = array('m' => 'add');
-	    if(!empty($c)) $urlParams['c'] = $c;
-		cot_redirect(cot_url('page', $urlParams, '', true));
+	}
+	else
+	{
+		cot_redirect(cot_url('page', 'm=add&c='.$c, '', true));
 	}
 }
 
-$rpage = array(
-    'page_keywords' => '',
-    'page_metatitle' => '',
-    'page_metadesc' => '',
-    'page_alias' => '',
-    'page_title' => '',
-    'page_desc' => '',
-    'page_author' => '',
-    'page_file' => '',
-    'page_url' => '',
-    'page_size' => '',
-    'page_text' => '',
-);
-
 // Page cloning support
 $clone = cot_import('clone', 'G', 'INT');
-if ($clone > 0) {
-	$rpage = cot::$db->query("SELECT * FROM ".cot::$db->pages." WHERE page_id = ?", $clone)->fetch();
+if ($clone > 0)
+{
+	$rpage = $db->query("SELECT * FROM $db_pages WHERE page_id = ?", $clone)->fetch();
 }
 
-if (empty($rpage['page_cat']) && !empty($c)) $rpage['page_cat'] = $c;
-
-if (!empty($rpage['page_cat'])) {
-    list(cot::$usr['auth_read'], cot::$usr['auth_write'], cot::$usr['isadmin']) = cot_auth('page', $rpage['page_cat']);
-    cot_block(cot::$usr['auth_write']);
-
-    if (!cot::$usr['isadmin'] && cot::$structure['page'][$rpage['page_cat']]['locked']) cot_die_message(602, TRUE);
-
-    cot::$sys['sublocation'] = cot::$structure['page'][$rpage['page_cat']]['title'];
-    $mskin = cot_tplfile(array('page', 'add', cot::$structure['page'][$rpage['page_cat']]['tpl']));
-
-} else {
-    if(!cot::$usr['isadmin']) {
-        // User can add page to these categories
-        $categories = array();
-        if (!empty(cot::$structure['page'])) {
-            foreach (cot::$structure['page'] as $i => $x) {
-                $display = cot_auth('page', $i, 'W');
-                if ($display && !empty($subcat) && isset(cot::$structure['page'][$subcat])) {
-                    $mtch = cot::$structure['page'][$subcat]['path'] . ".";
-                    $mtchlen = mb_strlen($mtch);
-                    $display = (mb_substr($x['path'], 0, $mtchlen) == $mtch || $i === $subcat);
-                }
-                if ($i != 'all' && $display) {
-                    $categories[] = $i;
-                }
-            }
-        }
-        cot_block(count($categories) > 0);
-    }
-
-    cot::$sys['sublocation'] = cot::$L['page_addtitle'];
-    $mskin = cot_tplfile(array('page', 'add'));
+if (empty($rpage['page_cat']) && !empty($c))
+{
+	$rpage['page_cat'] = $c;
+	$usr['isadmin'] = cot_auth('page', $rpage['page_cat'], 'A');
 }
 
-cot::$out['subtitle'] = cot::$L['page_addsubtitle'];
-if(!isset(cot::$out['head'] )) cot::$out['head']  = '';
-cot::$out['head'] .= cot::$R['code_noindex'];
+$out['subtitle'] = $L['page_addsubtitle'];
+$out['head'] .= $R['code_noindex'];
+$sys['sublocation'] = $structure['page'][$c]['title'];
+
+$mskin = cot_tplfile(array('page', 'edit', $structure['page'][$rpage['page_cat']]['tpl']));
 
 /* === Hook === */
 foreach (cot_getextplugins('page.add.main') as $pl)
@@ -157,34 +123,33 @@ foreach (cot_getextplugins('page.add.main') as $pl)
 }
 /* ===== */
 
-require_once cot::$cfg['system_dir'].'/header.php';
+require_once $cfg['system_dir'].'/header.php';
 $t = new XTemplate($mskin);
 
 $pageadd_array = array(
-	'PAGEADD_PAGETITLE' => cot::$L['page_addtitle'],
-	'PAGEADD_SUBTITLE'  => cot::$L['page_addsubtitle'],
-	'PAGEADD_ADMINEMAIL' => "mailto:".cot::$cfg['adminemail'],
-	'PAGEADD_FORM_SEND' => cot_url('page', 'm=add&a=add&c='.$c),
-	'PAGEADD_FORM_CAT' => cot_selectbox_structure('page', $rpage['page_cat'], 'rpagecat'),
-	'PAGEADD_FORM_CAT_SHORT' => cot_selectbox_structure('page', $rpage['page_cat'], 'rpagecat', $c),
-	'PAGEADD_FORM_KEYWORDS' => cot_inputbox('text', 'rpagekeywords', $rpage['page_keywords'], array('size' => '32', 'maxlength' => '255')),
-	'PAGEADD_FORM_METATITLE' => cot_inputbox('text', 'rpagemetatitle', $rpage['page_metatitle'], array('size' => '64', 'maxlength' => '255')),
-	'PAGEADD_FORM_METADESC' => cot_textarea('rpagemetadesc', $rpage['page_metadesc'], 2, 64, array('maxlength' => '255')),
-	'PAGEADD_FORM_ALIAS' => cot_inputbox('text', 'rpagealias', $rpage['page_alias'], array('size' => '32', 'maxlength' => '255')),
-	'PAGEADD_FORM_TITLE' => cot_inputbox('text', 'rpagetitle', $rpage['page_title'], array('size' => '64', 'maxlength' => '255')),
-	'PAGEADD_FORM_DESC' => cot_textarea('rpagedesc', $rpage['page_desc'], 2, 64, array('maxlength' => '255')),
-	'PAGEADD_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', $rpage['page_author'], array('size' => '24', 'maxlength' => '100')),
-	'PAGEADD_FORM_OWNER' => cot_build_user(cot::$usr['id'], htmlspecialchars(cot::$usr['name'])),
-	'PAGEADD_FORM_OWNERID' => cot::$usr['id'],
-	'PAGEADD_FORM_DATE' => cot_selectbox_date($sys['now'], 'long', 'rpagedate'),
-	'PAGEADD_FORM_BEGIN' => cot_selectbox_date($sys['now'], 'long', 'rpagebegin'),
-	'PAGEADD_FORM_EXPIRE' => cot_selectbox_date(0, 'long', 'rpageexpire'),
-	'PAGEADD_FORM_FILE' => cot_selectbox($rpage['page_file'], 'rpagefile', range(0, 2), array(cot::$L['No'], cot::$L['Yes'],
-        cot::$L['Members_only']), false),
-	'PAGEADD_FORM_URL' => cot_inputbox('text', 'rpageurl', $rpage['page_url'], array('size' => '56', 'maxlength' => '255')),
-	'PAGEADD_FORM_SIZE' => cot_inputbox('text', 'rpagesize', $rpage['page_size'], array('size' => '56', 'maxlength' => '255')),
-	'PAGEADD_FORM_TEXT' => cot_textarea('rpagetext', $rpage['page_text'], 24, 120, '', 'input_textarea_editor'),
-	'PAGEADD_FORM_PARSER' => cot_selectbox(cot::$cfg['page']['parser'], 'rpageparser', $parser_list, $parser_list, false)
+	'PAGEEDIT_PAGETITLE' => $L['page_addtitle'],
+	'PAGEEDIT_SUBTITLE' => $L['page_addsubtitle'],
+	'PAGEEDIT_ADMINEMAIL' => "mailto:".$cfg['adminemail'],
+	'PAGEEDIT_FORM_SEND' => cot_url('page', 'm=add&a=add&c='.$c),
+	'PAGEEDIT_FORM_CAT' => cot_selectbox_structure('page', @$rpage['page_cat'], 'rpagecat'),
+	'PAGEEDIT_FORM_CAT_SHORT' => cot_selectbox_structure('page', @$rpage['page_cat'], 'rpagecat', $c),
+	'PAGEEDIT_FORM_KEYWORDS' => cot_inputbox('text', 'rpagekeywords', @$rpage['page_keywords'], array('size' => '32', 'maxlength' => '255')),
+	'PAGEEDIT_FORM_METATITLE' => cot_inputbox('text', 'rpagemetatitle', @$rpage['page_metatitle'], array('size' => '64', 'maxlength' => '255')),
+	'PAGEEDIT_FORM_METADESC' => cot_textarea('rpagemetadesc', @$rpage['page_metadesc'], 2, 64, array('maxlength' => '255')),
+	'PAGEEDIT_FORM_ALIAS' => cot_inputbox('text', 'rpagealias', @$rpage['page_alias'], array('size' => '32', 'maxlength' => '255')),
+	'PAGEEDIT_FORM_TITLE' => cot_inputbox('text', 'rpagetitle', @$rpage['page_title'], array('size' => '64', 'maxlength' => '255')),
+	'PAGEEDIT_FORM_DESC' => cot_textarea('rpagedesc', @$rpage['page_desc'], 2, 64, array('maxlength' => '255')),
+	'PAGEEDIT_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', @$rpage['page_author'], array('size' => '24', 'maxlength' => '100')),
+	'PAGEEDIT_FORM_OWNER' => cot_build_user($usr['id'], htmlspecialchars($usr['name'])),
+	'PAGEEDIT_FORM_OWNERID' => $usr['id'],
+	'PAGEEDIT_FORM_DATE' => cot_selectbox_date($sys['now'], 'long', 'rpagedate'),
+	'PAGEEDIT_FORM_BEGIN' => cot_selectbox_date($sys['now'], 'long', 'rpagebegin'),
+	'PAGEEDIT_FORM_EXPIRE' => cot_selectbox_date(0, 'long', 'rpageexpire'),
+	'PAGEEDIT_FORM_FILE' => cot_selectbox(@$rpage['page_file'], 'rpagefile', range(0, 2), array($L['No'], $L['Yes'], $L['Members_only']), false),
+	'PAGEEDIT_FORM_URL' => cot_inputbox('text', 'rpageurl', @$rpage['page_url'], array('size' => '56', 'maxlength' => '255')),
+	'PAGEEDIT_FORM_SIZE' => cot_inputbox('text', 'rpagesize', @$rpage['page_size'], array('size' => '56', 'maxlength' => '255')),
+	'PAGEEDIT_FORM_TEXT' => cot_textarea('rpagetext', @$rpage['page_text'], 24, 120, '', 'input_textarea_editor'),
+	'PAGEEDIT_FORM_PARSER' => cot_selectbox($cfg['page']['parser'], 'rpageparser', $parser_list, $parser_list, false)
 );
 
 $t->assign($pageadd_array);
@@ -197,10 +162,10 @@ if(!empty(cot::$extrafields[cot::$db->pages])) {
         $exfld_title = cot_extrafield_title($exfld, 'page_');
 
         $t->assign(array(
-            'PAGEADD_FORM_' . $uname => $exfld_val,
-            'PAGEADD_FORM_' . $uname . '_TITLE' => $exfld_title,
-            'PAGEADD_FORM_EXTRAFLD' => $exfld_val,
-            'PAGEADD_FORM_EXTRAFLD_TITLE' => $exfld_title
+            'PAGEEDIT_FORM_' . $uname => $exfld_val,
+            'PAGEEDIT_FORM_' . $uname . '_TITLE' => $exfld_title,
+            'PAGEEDIT_FORM_EXTRAFLD' => $exfld_val,
+            'PAGEEDIT_FORM_EXTRAFLD_TITLE' => $exfld_title
         ));
         $t->parse('MAIN.EXTRAFLD');
     }

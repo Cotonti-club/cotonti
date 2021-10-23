@@ -20,7 +20,7 @@ require_once cot_incfile('i18n', 'plug');
 
 // Load valid locales
 $cache && $i18n_locales = $cache->db->get('locales', 'i18n');
-if (!$i18n_locales)
+if (!isset($i18n_locales))
 {
 	cot_i18n_load_locales();
 	$cache && $cache->db->store('locales', $i18n_locales, 'i18n');

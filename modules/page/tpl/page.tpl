@@ -1,66 +1,69 @@
 <!-- BEGIN: MAIN -->
-
-		<div class="col3-2 first">
-			<div class="block">
-				<h2 class="page">{PAGE_TITLE}</h2>
-				<div class="combox">{PAGE_COMMENTS_COUNT}</div>
-				<h3>{PAGE_SHORTTITLE}</h3>
-				<!-- IF {PAGE_DESC} --><p class="small">{PAGE_DESC}</p><!-- ENDIF -->
-				<div class="clear desc">
-					<p class="column">
-						<strong>{PHP.L.Tags}:</strong>
-<!-- BEGIN: PAGE_TAGS_ROW -->
-						<!-- IF {PHP.tag_i} > 0 -->, <!-- ENDIF --><a href="{PAGE_TAGS_ROW_URL}" title="{PAGE_TAGS_ROW_TAG}" rel="nofollow">{PAGE_TAGS_ROW_TAG}</a>
-<!-- END: PAGE_TAGS_ROW -->
-<!-- BEGIN: PAGE_NO_TAGS -->
-						{PAGE_NO_TAGS}
-<!-- END: PAGE_NO_TAGS -->
-					</p>
-					<p class="column floatright">
-						<strong>{PHP.L.Filedunder}:</strong>{PAGE_CATPATH}
-					</p>
-				</div>
-				<div class="clear textbox">{PAGE_TEXT}</div>
-<!-- BEGIN: PAGE_FILE -->
-				<div class="download">
-<!-- BEGIN: MEMBERSONLY -->
-					<p>{PAGE_SHORTTITLE}</p>
-<!-- END: MEMBERSONLY -->
-<!-- BEGIN: DOWNLOAD -->
-					<p>{PHP.L.Download}: <a class="strong" href="{PAGE_FILE_URL}">{PAGE_SHORTTITLE}</a></p>
-<!-- END: DOWNLOAD -->
-					<p>{PHP.L.Filesize}, kB: {PAGE_FILE_SIZE}{PHP.L.kb}</p>
-					<p>{PHP.L.Downloaded}: {PAGE_FILE_COUNT}</p>
-				</div>
-<!-- END: PAGE_FILE -->
-			</div>
-			{PAGE_COMMENTS_DISPLAY}
-		</div>
-
-		<div class="col3-1">
-<!-- BEGIN: PAGE_ADMIN -->
-			<div class="block">
-				<h2 class="admin">{PHP.L.Adminpanel}</h2>
-				<ul class="bullets">
-					<!-- IF {PHP.usr.isadmin} -->
-					<li><a href="{PHP|cot_url('admin')}">{PHP.L.Adminpanel}</a></li>
-					<!-- ENDIF -->
-					<li><a href="{PAGE_CAT|cot_url('page','m=add&c=$this')}">{PHP.L.page_addtitle}</a></li>
-					<li>{PAGE_ADMIN_UNVALIDATE}</li>
-					<li>{PAGE_ADMIN_EDIT}</li>
-					<li>{PAGE_ADMIN_CLONE}</li>
-					<li>{PAGE_ADMIN_DELETE}</li>
-				</ul>
-			</div>
-<!-- END: PAGE_ADMIN -->
-			{FILE "{PHP.cfg.themes_dir}/{PHP.theme}/inc/contact.tpl"}
-<!-- BEGIN: PAGE_MULTI -->
-			<div class="block">
-				<h2 class="info">{PHP.L.Summary}:</h2>
-				{PAGE_MULTI_TABTITLES}
-				<p class="paging">{PAGE_MULTI_TABNAV}</p>
-			</div>
-<!-- END: PAGE_MULTI -->
-		</div>
-
+<div class="uk-container uk-margin-top uk-margin-bottom ">
+    {PAGE_BREADCRUMBS}
+    <div class="uk-card uk-card-small uk-card-default uk-margin-medium-top uk-margin-medium-bottom">
+        <div class="uk-card-body">
+            <!-- IF {PAGE_ID|cot_attach_one("images", $this, 0, "page")} -->
+            <div class="uk-position-relative uk-visible-toggle" tabindex="-1" uk-slideshow="animation: pull">
+                <ul class="uk-slideshow-items">
+                    <!-- FOR {KEY}, {VALUE} IN {PAGE_ID|cot_attach("images", $this, 0)} -->
+                    <li>
+                        <img src="{VALUE.ATTACH_ROW_FULLPATH}" alt=''  uk-cover>
+                    </li>
+                    <!-- ENDFOR -->
+                </ul>
+                <a class="uk-position-center-left uk-position-small uk-hidden-hover uk-background-default uk-padding-small uk-border-rounded" href="#" uk-slidenav-previous uk-slideshow-item="previous"></a>
+                <a class="uk-position-center-right uk-position-small uk-hidden-hover uk-background-default uk-padding-small uk-border-rounded" href="#" uk-slidenav-next uk-slideshow-item="next"></a>
+            </div>
+            <!-- ENDIF -->
+            <div class="uk-margin-small-top">
+               <div class="uk-grid">
+                   <div class="uk-width-expand@s">
+                       <!-- BEGIN: PAGE_ADMIN -->
+                       <div>
+                           <a href="javascript:void(0)" class="uk-button-text" uk-tooltip="{PHP.L.Adminpanel}"><span uk-icon="more"></span></a>
+                           <div uk-dropdown="mode: click;">
+                               <ul class="uk-nav uk-dropdown-nav">
+                                   <!-- IF {PHP.usr.isadmin} -->
+                                   <li><a href="{PHP|cot_url('admin')}">{PHP.L.Adminpanel}</a></li>
+                                   <!-- ENDIF -->
+                                   <li><a href="{PAGE_CAT|cot_url('page','m=add&c=$this')}">{PHP.L.page_addtitle}</a></li>
+                                   <li>{PAGE_ADMIN_UNVALIDATE}</li>
+                                   <li>{PAGE_ADMIN_EDIT}</li>
+                                   <li>{PAGE_ADMIN_CLONE}</li>
+                                   <li>{PAGE_ADMIN_DELETE}</li>
+                               </ul>
+                           </div>
+                       </div>
+                       <!-- END: PAGE_ADMIN -->
+                   </div>
+                   <div class="uk-width-1-2@s uk-width-1-3@m uk-width-1-4@l">
+                       {PAGE_ID|cot_likes("page", $this)}
+                   </div>
+               </div>
+            </div>
+            <h1 class="uk-h3 uk-margin-small-top">{PAGE_TITLE}</h1>
+            {PAGE_TEXT}
+            <div>
+                <strong>{PHP.L.Tags}:</strong>
+                <!-- BEGIN: PAGE_TAGS_ROW -->
+                <!-- IF {PHP.tag_i} > 0 -->, <!-- ENDIF -->
+                <a href="{PAGE_TAGS_ROW_URL}" title="{PAGE_TAGS_ROW_TAG}" el="nofollow">{PAGE_TAGS_ROW_TAG}</a>
+                <!-- END: PAGE_TAGS_ROW -->
+                <!-- BEGIN: PAGE_NO_TAGS -->
+                {PAGE_NO_TAGS}
+                <!-- END: PAGE_NO_TAGS -->
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- BEGIN: PAGE_MULTI -->
+    <div class="block">
+        <h2 class="info">{PHP.L.Summary}:</h2>
+        {PAGE_MULTI_TABTITLES}
+        <p class="paging">{PAGE_MULTI_TABNAV}</p>
+    </div>
+    <!-- END: PAGE_MULTI -->
+    {PAGE_COMMENTS_DISPLAY}
+</div>
 <!-- END: MAIN -->

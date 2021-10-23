@@ -3,7 +3,7 @@
 		<div class="block">
 			<h2 class="forums">{FORUMS_SECTIONS_PAGETITLE}</h2>
 <!-- BEGIN: FORUMS_SECTIONS -->
-			<table class="cells">
+			<table class="table">
 				<thead>
 					<tr>
 						<td class="coltop" class="width10">&nbsp;</td>
