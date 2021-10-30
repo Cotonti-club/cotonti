@@ -18,7 +18,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if ($i18n_enabled)
 {
-	if ($cat_i18n && $i18n_notmain)
+	if (isset($cat_i18n) && isset($i18n_notmain))
 	{
 		// Override category tags
 		$catpath = cot_breadcrumbs(cot_i18n_build_catpath('page', $c, $i18n_locale), $cfg['homebreadcrumb']);

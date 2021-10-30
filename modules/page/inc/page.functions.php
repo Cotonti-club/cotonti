@@ -172,7 +172,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
             'MORE' => ($cutted) ? cot_rc('list_more', array('page_url' => $page_data['page_pageurl'])) : '',
             'AUTHOR' => htmlspecialchars($page_data['page_author']),
             'OWNERID' => $page_data['page_ownerid'],
-            'OWNERNAME' => htmlspecialchars($page_data['user_name']),
+            'OWNERNAME' => htmlspecialchars(@$page_data['user_name']),
             'DATE' => cot_date($date_format, $page_data['page_date']),
             'BEGIN' => cot_date($date_format, $page_data['page_begin']),
             'EXPIRE' => cot_date($date_format, $page_data['page_expire']),
@@ -909,11 +909,11 @@ function cot_build_structure_page_tree($c)
     foreach ($items as $item) {
         $tt->assign([
             "ROW_TITLE" => $item["title"],
-            "ROW_DESC" => $item["desc"],
-            "ROW_ICON" => $item["icon"],
-            "ROW_COUNT" => $item["count"],
-            "ROW_PARENT" => $item["parent_id"],
-            "ROW_CHILDREN" => $item["children"],
+            "ROW_DESC" => isset($item["desc"]) ? $item["desc"] : '',
+            "ROW_ICON" => isset($item["icon"]) ? $item["icon"] : '',
+            "ROW_COUNT" => isset($item["count"]) ? $item["count"] : 0,
+            "ROW_PARENT" => isset($item["parent_id"]) ? $item["parent_id"] : 0,
+            "ROW_CHILDREN" => isset($item["children"]) ? $item["children"] : null,
         ]);
 
         $tt->parse("MAIN.ROW");

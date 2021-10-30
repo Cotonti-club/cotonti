@@ -1,18 +1,18 @@
 <!-- BEGIN: MAIN -->
-<div>
-	<ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
-		<!-- FOR {KEY}, {VALUE} IN {ITEMS} -->
-		<li <!-- IF {VALUE.children} -->class="uk-parent"<!-- ENDIF -->>
+<ul class="list-unstyled">
+	<!-- FOR {KEY}, {VALUE} IN {ITEMS} -->
+	<li class="align-items-center">
 		<a href="{VALUE.href}">{VALUE.title}</a>
 		<!-- IF {VALUE.children} -->
-		<ul class="uk-nav-sub">
+		<ul class="list-unstyled ms-2">
 			<!-- FOR {SUBCAT} IN {VALUE.children} -->
-			<li><a href="{SUBCAT.href}">{SUBCAT.title}</a></li>
+			<li class="align-items-center">
+				<a href="{SUBCAT.href}">{SUBCAT.title}</a>
+			</li>
 			<!-- ENDFOR -->
 		</ul>
 		<!-- ENDIF -->
-		</li>
-		<!-- ENDFOR -->
-	</ul>
-</div>
+	</li>
+	<!-- ENDFOR -->
+</ul>
 <!-- END: MAIN -->

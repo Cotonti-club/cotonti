@@ -94,7 +94,7 @@ function cot_clear_mark($text, $words)
 		{
 			$search_tag[] = preg_quote($i);
 		}
-		$text_result = preg_replace('`('.implode('|', $search_tag).')`i', '<span class="search_hl">$1</span>', $text_result);
+		$text_result = preg_replace('`('.implode('|', $search_tag).')`i', '<mark>$1</mark>', $text_result);
 		return ($text_result);
 	}
 

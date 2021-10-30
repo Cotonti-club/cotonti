@@ -1,0 +1,262 @@
+body {
+  background-color: #eee;
+}
+
+.appbar {
+  background: #012d48;
+  height: 30px;
+
+  .container {
+    height: 30px;
+    background-color: #013f65;
+
+    .search-input {
+      background-color: #0a5e91;
+      border: 0;
+      color: rgba(255, 255, 255, .7);
+      padding: 2px 7px;
+      font-size: 14px;
+      border-radius: 5px;
+      min-width: 200px;
+
+      &:focus-visible {
+        outline: 0 !important;
+      }
+    }
+
+    .btn {
+      border-radius: 0;
+      line-height: 1;
+
+      &-sm {
+        padding: .30rem .5rem;
+      }
+
+      &.show {
+        background: white;
+        color: black;
+      }
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    .dropdown-login {
+      width: 300px;
+    }
+
+    .dropdown-menu {
+      margin-top: -3px !important;
+      border-top: none;
+      margin-right: -1px !important;
+      border-radius: 6px 0 6px 6px;
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}
+
+.header {
+  border-top: 2px solid #0584b5;
+  background: #024c79;
+
+  .container {
+    margin-top: -2px;
+    border-top: 2px solid #0584b5;
+    min-height: 130px;
+    background: #015385 url(../img/header.png) left -1px no-repeat;
+
+    .row {
+      min-height: 128px;
+    }
+
+    .logo {
+      display: inline-block;
+      width: auto;
+
+      a {
+        display: inline-block;
+        width: 180px;
+        height: 55px;
+        background: url(../img/logo.png) no-repeat;
+        z-index: 1;
+        position: relative;
+
+        span {
+          text-indent: -9999px;
+          display: block;
+        }
+
+        &:after {
+          content: "CLUB";
+          //color: #40b8e5;
+          color: #dbf56a;
+          display: block;
+          font-size: 18px;
+          letter-spacing: 1px;
+          position: absolute;
+          width: 100px;
+          height: 100px;
+          right: -22px;
+          top: 0;
+          writing-mode: tb;
+          text-shadow: 0 2px #024c79;
+          font-weight: 700;
+        }
+      }
+
+      small {
+        display: inline-block;
+        margin: 3px 6px;
+        padding: 0 4px;
+        line-height: 17px;
+        background: #096093;
+        font-size: 10px;
+        color: #fff;
+        box-shadow: -2px 0px 2px 0px rgba(0, 0, 0, .27);
+      }
+    }
+
+    .navbar {
+      min-height: 128px;
+      align-items: flex-end;
+    }
+
+    .nav-item {
+      .nav-link {
+        font-size: 14px;
+
+        &:not(.active) {
+          color: white;
+        }
+
+        small {
+          opacity: .7;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+.main {
+  background: #fff;
+  border-bottom: 3px #bbb solid;
+  padding: 30px;
+}
+
+.btn {
+  &-appbar {
+    color: #fff;
+    border-radius: 0;
+
+    svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 1.5px;
+    }
+
+    &:hover {
+      background: #0584b5;
+      color: #fff;
+    }
+  }
+}
+
+.post {
+  position: relative;
+
+  &:not(:first-child){
+    margin-top: 46px;
+    border-top: 1px solid #ddd;
+    padding-top: 46px;
+  }
+  &:after {
+    content: "";
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    position: absolute;
+    bottom: -48px;
+    left: 0;
+    right: 0;
+    height: 1px
+  }
+
+  .post-title {
+    margin-top: 0;
+    margin-bottom: 8px;
+    line-height: 1.2em;
+    font-weight: inherit;
+    font-size: 22px;
+    a{
+      color: var(--bs-primary);
+      text-decoration: none;
+    }
+  }
+
+  .post-head {
+    margin-bottom: 24px;
+    position: relative;
+
+    .post-details {
+      margin: 0 !important;
+      color: var(--bs-gray-500);
+      font-size: 14px;
+      a{
+        color: var(--bs-gray-500);
+        text-decoration: none;
+        &:hover{
+          color: var(--bs-primary);
+          text-decoration: none;
+        }
+      }
+      svg{
+        width: 16px;
+        height: 16px;
+        margin-right: 1px;
+        transform: translateY(-1px);
+      }
+    }
+  }
+
+  .post-head.no-title,
+  .widget_search form,
+  .widget_social ul.social-icons {
+    margin-bottom: 0
+  }
+
+  .post-media > * {
+    margin-bottom: 24px !important;
+  }
+
+  .post-body {
+    margin-bottom: 24px;
+    font-size: 16px;
+  }
+
+  .post-details {
+    margin: 24px 0;
+
+    span {
+      margin-right: 12px;
+      padding-right: 12px;
+      border-right-style: solid;
+      border-right-width: 1px;
+
+      i {
+        vertical-align: middle;
+        margin-top: -.4em
+      }
+      &:last-child {
+        margin-right: 0;
+        padding-right: 0;
+        border-right-width: 0
+      }
+    }
+  }
+}
