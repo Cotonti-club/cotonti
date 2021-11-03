@@ -10,13 +10,12 @@
 
     <section class="section dashboard">
         <div class="row">
+            <!-- BEGIN: TOPPANEL -->
+            {ADMIN_HOME_TOPPANEL}
+            <!-- END: TOPPANEL -->
+        </div>
+        <div class="row">
             <div class="col-lg-8">
-                <div class="row">
-                    <!-- BEGIN: TOPPANEL -->
-                        {ADMIN_HOME_TOPPANEL}
-                    <!-- END: TOPPANEL -->
-                </div>
-
                 <!-- BEGIN: MAINPANEL -->
                 {ADMIN_HOME_MAINPANEL}
                 <!-- END: MAINPANEL -->

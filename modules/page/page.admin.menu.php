@@ -7,6 +7,8 @@
  */
 
 defined('COT_CODE') or die('Wrong URL.');
+include_once cot_langfile('page', 'module', 'ru');
+
 if (defined('COT_ADMIN')) {
     $isadmin = cot_auth('page', 'any', 'A');
     if ($isadmin) {
@@ -22,13 +24,16 @@ if (defined('COT_ADMIN')) {
 
 
         $menu["page"] = [
-            "title" => $L['Pages'] ?: 'Pages',
+            "title" => __('Pages'),
             "icon" => 'bi bi-file',
             "url" => "/admin.php?m=page",
-            "active" => ($current_module == "page") || ($current_module == "config" && $current_page == "page") || ($current_module == "structure" && $current_n == "page"),
+            "active" => ($current_module == "page") ||
+                ($current_module == "config" && $current_page == "page") ||
+                ($current_module == "structure" && $current_n == "page") ||
+                ($current_module == "extrafields" && $current_n == "{$db_x}pages"),
             "items" => [
                 [
-                    "title" => $L['adm_showall'],
+                    "title" => __('adm_showall'),
                     "url" => cot_url("admin", "m=page"),
                     "active" => $current_module == "page" && !$current_page && !$current_filter  && !$current_n || (isset($_GET["search"]) && $current_state != 2),
                 ],
@@ -61,8 +66,8 @@ if (defined('COT_ADMIN')) {
                 ],
                 [
                     "title" => $L['adm_extrafields'],
-                    "url" => cot_url('admin','m=page&n=extrafields'),
-                    "active" => $current_module == "page" && $current_n == "extrafields",
+                    "url" => cot_url('admin',"m=extrafields&n={$db_x}pages"),
+                    "active" => $current_module == "extrafields" && $current_n == "{$db_x}pages",
                 ],
             ]
         ];

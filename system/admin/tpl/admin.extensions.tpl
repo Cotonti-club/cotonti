@@ -233,7 +233,7 @@
 <!-- BEGIN: DEFAULT -->
 <div class="card">
     <div class="card-header">
-        <input class="form-control" type="text" placeholder="Поиск" id="search-text"
+        <input class="form-control" type="text" placeholder="{__('Search')}" id="search-text"
                onkeyup="tableSearch('ext-table', 'search-text')">
     </div>
     <div class="card-body p-0 table-responsive">

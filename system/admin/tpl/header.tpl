@@ -275,15 +275,6 @@
                 <span>{PHP.L.Home}</span>
             </a>
         </li>
-        <!-- IF {PHP.usr.admin_structure} -->
-        <li class="nav-item">
-            <a class="<!-- IF {PHP.m} == 'structure' -->nav-link<!-- ELSE -->nav-link collapsed<!-- ENDIF -->"
-               href="{PHP|cot_url('admin', 'm=structure')}">
-                <i class="bi bi-folder"></i>
-                <span>{PHP.L.Structure}</span>
-            </a>
-        </li>
-        <!-- ENDIF -->
 
         <!-- IF {PHP.usr.admin_users} -->
         <li class="nav-item">

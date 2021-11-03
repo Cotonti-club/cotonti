@@ -1,0 +1,11 @@
+
+#editorjs{
+    border: 1px solid #e5e5e5;
+}
+.ce-toolbar__content,
+.ce-block__content{
+    max-width: 90%;
+}
+.codex-editor__redactor{
+    padding-bottom: 100px!important;
+}

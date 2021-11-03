@@ -58,6 +58,10 @@ $R['input_select'] = '<select class="form-select" name="{$name}" {$attrs}>{$opti
 $R['input_text'] = '<input type="text" name="{$name}" value="{$value}" class="form-control" {$attrs} />{$error}';
 $R['input_textarea'] = '<textarea name="{$name}" rows="{$rows}" cols="{$cols}" class="form-control" {$attrs}>{$value}</textarea>{$error}';
 $R['input_radio'] = '<label class="form-check"><input type="radio" name="{$name}" value="{$value}" class="form-check-input" {$checked}{$attrs} /> {$title}</label>';
+$R['input_checkbox'] = '<div class="form-check">
+                        <input type="checkbox" name="{$name}" value="{$value}" class="form-check-input" id="checkbox_{$name}" {$checked}{$attrs}>
+                        <label class="form-check-label" for="checkbox_{$name}">{$title}</label>
+                        </div>';
 
 
 // Pagination

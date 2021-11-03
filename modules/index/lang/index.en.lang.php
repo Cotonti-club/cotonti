@@ -14,3 +14,4 @@ defined('COT_CODE') or die('Wrong URL.');
  */
 
 $L['info_desc'] = 'Homepage module';
+$L['index_conf'] = 'Home page';

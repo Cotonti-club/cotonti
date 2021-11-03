@@ -177,7 +177,7 @@ else
 				$field['field_params'] = isset($field_params[$k]) ? cot_import($field_params[$k], 'D', 'HTM') : null;
 				$field['field_description'] = cot_import($field_description[$k], 'D', 'NOC');
 				$field['field_default'] = isset($field_default[$k]) ? cot_import($field_default[$k], 'D', 'HTM') : null;
-				$field['field_required'] = cot_import($field_required[$k], 'D', 'BOL');
+				$field['field_required'] = cot_import(@$field_required[$k], 'D', 'BOL');
 				$field['field_parse'] = cot_import($field_parse[$k], 'D', 'ALP');
 				$field['field_enabled'] = cot_import($field_enabled[$k], 'D', 'BOL');
 				$field['field_location'] = $n;
@@ -229,7 +229,7 @@ else
 	cot_load_extrafields(true);
 
 	$totalitems = $db->query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location = '$n'")->fetchColumn();
-	$res = $db->query("SELECT * FROM $db_extra_fields WHERE field_location = '$n' ORDER BY field_name ASC LIMIT $d, ".$maxperpage);
+	$res = $db->query("SELECT * FROM $db_extra_fields WHERE field_location = '$n' ORDER BY field_name ASC");
 
 	$pagenav = cot_pagenav('admin', 'm=extrafields&n='.$n, $d, $totalitems, $maxperpage, 'd', '', cot::$cfg['jquery'] && cot::$cfg['turnajax']);
 
@@ -239,10 +239,24 @@ else
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('admin.extrafields.loop');
 	/* ===== */
+
+
+    $tags_list = '';
+    $tags_list_li = '';
+    if(isset($extra_whitelist[$n])) {
+        if (is_array($extra_whitelist[$n]['tags'])) {
+            foreach ($extra_whitelist[$n]['tags'] as $ktags => $vtags) {
+                $tags_list .= cot_rc('admin_exflds_array', array('tplfile' => $ktags, 'tags' => $vtags));
+                $tags_list_li .= '<li>' . cot_rc('admin_exflds_array', array('tplfile' => $ktags, 'tags' => $vtags)) . '</li>';
+            }
+        }
+    }
+
 	foreach ($res->fetchAll() as $row)
 	{
 		$ii++;
 		$t->assign(array(
+            'ADMIN_EXTRAFIELDS_ROW_FORM_EDIT' => cot_url('admin', 'm=extrafields&n='.$n.'&a=upd&d='.$durl),
 			'ADMIN_EXTRAFIELDS_ROW_NAME' => cot_inputbox('text', 'field_name['.$row['field_name'].']', $row['field_name'], 'class="exfldname"'),
 			'ADMIN_EXTRAFIELDS_ROW_FIELDNAME' => htmlspecialchars($row['field_name']),
 			'ADMIN_EXTRAFIELDS_ROW_DESCRIPTION' => cot_textarea('field_description['.$row['field_name'].']', $row['field_description'], 1, 30, 'class="exflddesc"'),
@@ -251,14 +265,16 @@ else
 			'ADMIN_EXTRAFIELDS_ROW_PARAMS' => cot_textarea('field_params['.$row['field_name'].']', $row['field_params'], 1, 60, 'class="exfldparams"'),
 			'ADMIN_EXTRAFIELDS_ROW_HTML' => cot_textarea('field_html['.$row['field_name'].']', $row['field_html'], 1, 60, 'class="exfldhtml"'),
 			'ADMIN_EXTRAFIELDS_ROW_DEFAULT' => cot_textarea('field_default['.$row['field_name'].']', $row['field_default'], 1, 60, 'class="exflddefault"'),
-			'ADMIN_EXTRAFIELDS_ROW_REQUIRED' => cot_checkbox($row['field_required'], 'field_required['.$row['field_name'].']', '', 'class="exfldrequired"'),
+			'ADMIN_EXTRAFIELDS_ROW_REQUIRED' => cot_checkbox($row['field_required'], 'field_required['.$row['field_name'].']', __('adm_extrafield_required'), 'class="exfldrequired"'),
 			'ADMIN_EXTRAFIELDS_ROW_ENABLED' => cot_checkbox($row['field_enabled'], 'field_enabled['.$row['field_name'].']', '', 'title="'.cot::$L['adm_extrafield_enable'].'" class="exfldenabled" '),
 			'ADMIN_EXTRAFIELDS_ROW_PARSE' => cot_selectbox($row['field_parse'], 'field_parse['.$row['field_name'].']', $parse_type, array(cot::$L['Default'], cot::$L['No']), false, 'class="exfldparse"'),
 			'ADMIN_EXTRAFIELDS_ROW_BIGNAME' => strtoupper($row['field_name']),
+			'ADMIN_EXTRAFIELDS_ROW_TITLE' => $row['field_description'],
 			'ADMIN_EXTRAFIELDS_ROW_ID' => $row['field_name'],
 			'ADMIN_EXTRAFIELDS_ROW_DEL_URL' => cot_url('admin', 'm=extrafields&n='.$n.'&a=del&name='.$row['field_name']),
 			'ADMIN_EXTRAFIELDS_ROW_COUNTER_ROW' => $ii,
-			'ADMIN_EXTRAFIELDS_ROW_ODDEVEN' => cot_build_oddeven($ii)
+			'ADMIN_EXTRAFIELDS_ROW_ODDEVEN' => cot_build_oddeven($ii),
+            'ADMIN_EXTRAFIELDS_ROW_TAGS' => $tags_list,
 		));
 
 		/* === Hook - Part2 : Include === */
@@ -269,18 +285,8 @@ else
 		/* ===== */
 
 		$t->parse('MAIN.TABLE.EXTRAFIELDS_ROW');
+        $t->parse('MAIN.TABLE.EXTRAFIELDS_LIST');
 	}
-
-	$tags_list = '';
-	$tags_list_li = '';
-	if(isset($extra_whitelist[$n])) {
-        if (is_array($extra_whitelist[$n]['tags'])) {
-            foreach ($extra_whitelist[$n]['tags'] as $ktags => $vtags) {
-                $tags_list .= cot_rc('admin_exflds_array', array('tplfile' => $ktags, 'tags' => $vtags));
-                $tags_list_li .= '<li>' . cot_rc('admin_exflds_array', array('tplfile' => $ktags, 'tags' => $vtags)) . '</li>';
-            }
-        }
-    }
 
 	$t->assign(array(
 		'ADMIN_EXTRAFIELDS_URL_FORM_EDIT' => cot_url('admin', 'm=extrafields&n='.$n.'&a=upd&d='.$durl),
@@ -291,7 +297,7 @@ else
 		'ADMIN_EXTRAFIELDS_PARAMS' => cot_textarea('field_params', '', 1, 60, 'class="exfldparams"'),
 		'ADMIN_EXTRAFIELDS_HTML' => cot_textarea('field_html', '', 1, 60, 'class="exfldhtml"'),
 		'ADMIN_EXTRAFIELDS_DEFAULT' => cot_textarea('field_default', '', 1, 60, 'class="exflddefault"'),
-		'ADMIN_EXTRAFIELDS_REQUIRED' => cot_checkbox(0, 'field_required', '', 'class="exfldrequired"'),
+		'ADMIN_EXTRAFIELDS_REQUIRED' => cot_checkbox(0, 'field_required', __('adm_extrafield_required'), 'class="exfldrequired"'),
 		'ADMIN_EXTRAFIELDS_PARSE' => cot_selectbox('HTML', 'field_parse', $parse_type, array(cot::$L['Default'], cot::$L['No']), false, 'class="exfldparse"'),
 		'ADMIN_EXTRAFIELDS_URL_FORM_ADD' => cot_url('admin', 'm=extrafields&n='.$n.'&a=add&d='.$durl),
 		'ADMIN_EXTRAFIELDS_PAGINATION_PREV' => $pagenav['prev'],

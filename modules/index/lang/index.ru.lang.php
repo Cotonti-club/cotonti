@@ -14,3 +14,4 @@ defined('COT_CODE') or die('Wrong URL.');
  */
 
 $L['info_desc'] = 'Модуль главной страницы';
+$L['index_conf'] = 'Главная страница';

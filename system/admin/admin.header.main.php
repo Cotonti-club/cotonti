@@ -30,78 +30,14 @@ if ($admin_read) {
     }
     if ($usr["admin_config"]) {
         $menu["settings_core"] = [
-            "title" => $L['home_ql_b1_title'],
+            "title" => $L['Configuration'],
             "icon" => 'bi-gear',
             "url" => cot_url("admin", "m=config"),
-            "active" => $current_module == "config" && $current_o == 'core',
-            "items" => [
-                [
-                    "title" => $L['Locale'],
-                    "url" => cot_url("admin", "m=config&n=edit&o=core&p=locale"),
-                    "active" => $current_module == "config" && $current_page == "locale",
-                ],
-                [
-                    "title" => $L['core_main'],
-                    "url" => cot_url("admin", "m=config&n=edit&o=core&p=main"),
-                    "active" => $current_module == "config" && $current_page == "main",
-                ],
-                [
-                    "title" => $L['core_menus'],
-                    "url" => cot_url("admin", "m=config&n=edit&o=core&p=menus"),
-                    "active" => $current_module == "config" && $current_page == "menus",
-                ],
-                [
-                    "title" => $L['core_performance'],
-                    "url" => cot_url("admin", "m=config&n=edit&o=core&p=performance"),
-                    "active" => $current_module == "config" && $current_page == "performance",
-                ],
-                [
-                    "title" => $L['Security'],
-                    "url" => cot_url("admin", "m=config&n=edit&o=core&p=security"),
-                    "active" => $current_module == "config" && $current_page == "security",
-                ],
-                [
-                    "title" => $L['core_sessions'],
-                    "url" => cot_url("admin", "m=config&n=edit&o=core&p=sessions"),
-                    "active" => $current_module == "config" && $current_page == "sessions",
-                ],
-                [
-                    "title" => $L['core_theme'],
-                    "url" => cot_url("admin", "m=config&n=edit&o=core&p=theme"),
-                    "active" => $current_module == "config" && $current_page == "theme",
-                ],
-                [
-                    "title" => $L['core_title'],
-                    "url" => cot_url("admin", "m=config&n=edit&o=core&p=title"),
-                    "active" => $current_module == "config" && $current_page == "title",
-                ],
-            ]
-        ];
-        $menu["settings_plugins"] = [
-            "title" => @$L['adm_plugins_settings'],
-            "icon" => 'bi-gear',
-            "url" => cot_url("admin", "m=config"),
-            "active" => $current_module == "config" && $current_o == 'plug',
-            "items" => [
-            ]
+            "active" => $current_module == "config" && $current_o != 'module',
         ];
     }
     if (!defined("COT_CONFIG_TYPE_HIDDEN")) {
         define("COT_CONFIG_TYPE_HIDDEN", 5);
-    }
-    $plugins_conf = $db->query("
-			SELECT DISTINCT(c.config_cat), r.ct_title FROM $db_config AS c
-				LEFT JOIN $db_core AS r ON c.config_cat = r.ct_code
-			WHERE config_owner = 'plug'
-			AND config_type != '" . COT_CONFIG_TYPE_HIDDEN . "'
-			ORDER BY config_cat ASC
-		")->fetchAll();
-    foreach ($plugins_conf as $plugin) {
-        $menu["settings_plugins"]["items"][] = [
-            "title" => $plugin["ct_title"],
-            "url" => cot_url('admin', "m=config&n=edit&o=plug&p={$plugin["config_cat"]}"),
-            "active" => $current_module == "config" && $current_o == 'plug' && $current_page == $plugin["config_cat"],
-        ];
     }
 
     $menu["other"] = [
@@ -111,23 +47,33 @@ if ($admin_read) {
         "active" => ($current_module == "other" && !$current_page) || $current_module == "cache" || ($current_module == "extrafields" && !$current_n) || $current_module == "log" || $current_module == "infos",
         "items" => [
             [
+                "title" => $L['adm_extrafields'],
+                "url" => cot_url('admin', 'm=extrafields'),
+                "active" => $current_module == "extrafields" && !$current_subpage,
+            ],
+            [
+                "title" => $L['Structure'],
+                "url" => cot_url('admin', 'm=structure'),
+                "active" => $current_module == "structure" && !$current_subpage,
+            ],
+            [
                 "title" => $L['adm_internalcache'],
-                "url" => "/admin.php?m=cache",
+                "url" =>  cot_url('admin', 'm=cache'),
                 "active" => $current_module == "cache" && !$current_subpage,
             ],
             [
                 "title" => $L['adm_diskcache'],
-                "url" => "/admin.php?m=cache&s=disk",
+                "url" =>  cot_url('admin', 'm=cache&s=disk'),
                 "active" => $current_module == "cache" && $current_subpage == "disk",
             ],
             [
                 "title" => $L['adm_log'],
-                "url" => "/admin.php?m=log",
+                "url" =>  cot_url('admin', 'm=log'),
                 "active" => $current_module == "log",
             ],
             [
                 "title" => $L['adm_infos'],
-                "url" => "/admin.php?m=infos",
+                "url" =>  cot_url('admin', 'm=infos'),
                 "active" => $current_module == "infos"
             ],
         ]

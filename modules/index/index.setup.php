@@ -15,6 +15,10 @@ Lock_members=
 Recommends_modules=page
 Recommends_plugins=indexnews,recentitems
 [END_COT_EXT]
+
+[BEGIN_COT_EXT_CONFIG]
+json=01:textarea:::Контент главной страницы
+[END_COT_EXT_CONFIG]
 ==================== */
 
 /**

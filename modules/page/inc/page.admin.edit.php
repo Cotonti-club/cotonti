@@ -131,7 +131,6 @@ foreach (cot_getextplugins('page.edit.main') as $pl)
 }
 /* ===== */
 
-require_once $cfg['system_dir'].'/header.php';
 $t = new XTemplate($mskin);
 
 $pageedit_array = array(
@@ -215,6 +214,5 @@ if ($usr['isadmin'])
 }
 
 $t->parse('MAIN');
-$t->out('MAIN');
+$adminmain = $t->text('MAIN');
 
-require_once cot::$cfg['system_dir'].'/footer.php';

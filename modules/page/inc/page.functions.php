@@ -841,8 +841,8 @@ function cot_page_enum($categories = '', $count = 0, $template = '', $order = ''
         'PAGE_TOP_PAGINATION' => $pagenav['main'],
         'PAGE_TOP_PAGEPREV' => $pagenav['prev'],
         'PAGE_TOP_PAGENEXT' => $pagenav['next'],
-        'PAGE_TOP_FIRST' => $pagenav['first'],
-        'PAGE_TOP_LAST' => $pagenav['last'],
+        'PAGE_TOP_FIRST' => isset($pagenav['first']) ? $pagenav['first'] : '',
+        'PAGE_TOP_LAST' => isset($pagenav['last']) ? $pagenav['last'] : '',
         'PAGE_TOP_CURRENTPAGE' => $pagenav['current'],
         'PAGE_TOP_TOTALLINES' => $totalitems,
         'PAGE_TOP_MAXPERPAGE' => $count,
@@ -891,7 +891,7 @@ function cot_page_selectcat($check, $name, $subcat = '', $hideprivate = true)
             $display = (mb_substr($x['path'], 0, $mtchlen) == $mtch || $i === $subcat);
         }
 
-        if ((!$is_module || cot_auth('page', $i, 'R')) && $i != 'all' && $display) {
+        if (cot_auth('page', $i, 'R') && $i != 'all' && $display) {
             $result_array[$i] = $x['tpath'];
         }
     }
