@@ -10,7 +10,7 @@ defined('COT_CODE') or die('Wrong URL');
 function cot_parse_editorjs($content)
 {
     $blocks = json_decode($content, 1);
-    if ($blocks["blocks"]) {
+    if (isset($blocks["blocks"])) {
         $result = '';
         foreach ($blocks["blocks"] as $block) {
             switch ($block["type"]) {
